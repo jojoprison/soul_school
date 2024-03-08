@@ -5,13 +5,13 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN curl -sSL https://install.python-poetry.org | python -
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 # Copy the current directory contents into the container at /app
 COPY . /app
 
 RUN poetry config virtualenvs.create false && \
-    poetry install --no-dev
+    poetry install --only main
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
