@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+.back-to-top {
+  position: fixed;
+  width: 55px;
+  height: 55px;
+  bottom: 20px;
+  right: 20px;
+  font-size: 30px;
+  background: wheat;
+  color: white;
+  cursor: pointer;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 5px 10px #ccc;
+}
+
+.back-to-top:hover {
+  background: red;
+}

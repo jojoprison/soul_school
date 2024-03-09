@@ -1,19 +1,14 @@
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'default_key')
 
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='').split()
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='*').split()
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,24 +18,29 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    # 'rest_framework.authtoken',
-    # 'djoser',
-    # 'debug_toolbar',
-    'courses.apps.CoursesConfig',
+    'rest_framework.authentication',
+    'rest_framework.authtoken',
+    'djoser',
+    'corsheaders',
+    'auth_custom',
+    'lessons'
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
+
 ROOT_URLCONF = 'back_end.urls'
+
 
 TEMPLATES = [
     {
@@ -58,6 +58,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'back_end.wsgi.application'
 
 
@@ -71,6 +72,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', default='soul_school')
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -87,8 +89,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -108,33 +108,37 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-#     ],
-#
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_FILTER_BACKENDS': [
-#         'django_filters.rest_framework.DjangoFilterBackend',
-#     ],
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 6,
-# }
-#
-# DJOSER = {
-#     'LOGIN_FIELD': 'email',
-#     'HIDE_USERS': False,
-#     'SERIALIZERS': {
-#         'user_create': 'api.serializers.users.UserCreateSerializer',
-#         'user': 'api.serializers.users.UserSerializer',
-#         'current_user': 'api.serializers.users.UserSerializer',
-#     },
-#     'PERMISSIONS': {
-#         'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
-#         'user_list': ['rest_framework.permissions.AllowAny'],
-#     },
-# }
-#
-# AUTH_USER_MODEL = 'users.User'
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'HIDE_USERS': False,
+    'PERMISSIONS': {
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
+        'user_list': ['rest_framework.permissions.AllowAny'],
+        'set_password': ['djoser.permissions.CurrentUserOrAdmin'],
+    },
+}
+
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]
+
+CORS_ALLOW_CREDENTIALS = True

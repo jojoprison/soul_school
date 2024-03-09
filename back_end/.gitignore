@@ -109,8 +109,7 @@ dmypy.json
 .vscode
 .idea
 
-venv
-static
-../.env
+django_static
+media
 db.sqlite
 celerybeat-schedule.db
