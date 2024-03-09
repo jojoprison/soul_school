@@ -8,16 +8,19 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 django = "^5.0.3"
-django-environ = "^0.11.2"
+#django-environ = "^0.11.2"
 djangorestframework = "^3.14.0"
 djoser = "^2.2.2"
-django-cors-headers = "^4.3.1"
 drf-yasg = "^1.21.7"
 django-behaviors = "^0.5.1"
+gunicorn = "^21.2.0"
+python-dotenv = "^1.0.1"
+psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.3.0"
 pytest = "^8.0.2"
+psycopg2 = "^2.9.9"
 # TODO
 #Faker = "^24.1.0"
 

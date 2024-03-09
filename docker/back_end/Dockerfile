@@ -4,16 +4,14 @@ LABEL authors="jojoprison"
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-WORKDIR /back_end
+COPY ./back_end/pyproject.toml ./back_end/poetry.lock /app/back_end/
 
-COPY pyproject.toml poetry.lock ./
+WORKDIR /app/back_end
 
 RUN pip install --upgrade pip && \
     pip install poetry && \
     poetry config virtualenvs.create false && \
     poetry install --only main --no-root
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-COPY . /back_end/
+COPY ./back_end /app/back_end
+COPY ./docker /app/docker

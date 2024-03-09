@@ -4,7 +4,7 @@ LABEL authors="jojoprison"
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-WORKDIR /back_end
+WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
 
@@ -13,7 +13,6 @@ RUN pip install --upgrade pip && \
     poetry config virtualenvs.create false && \
     poetry install --only main --no-root
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY . ./
 
-COPY . /back_end/
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "back_end.wsgi:application"]
